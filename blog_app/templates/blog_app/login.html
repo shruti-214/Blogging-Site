@@ -1,0 +1,36 @@
+{% extends 'blog_app/base.html' %}
+{% block body_content %}
+<div class="row">
+    <div class="col-md-offset-4 col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2>Login Here</h2>
+            </div>
+            <div class="panel-body">
+                <form action="{% url 'blog_app:login' %}" method="POST">
+                    {% csrf_token %}
+                    {% if error %}
+                    <div class="form-group">
+                        <p class="text-danger">{{error}}</p>
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" id="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" id="password">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary btn-block" value="Login">
+                    </div>
+                </form>
+            </div>
+            <div class="panel-footer">
+                <p>New User?&nbsp; <a class="btn btn-warning btn-sm" href="{% url 'blog_app:register' %}">Sign Up</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

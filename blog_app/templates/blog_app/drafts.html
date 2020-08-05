@@ -1,0 +1,21 @@
+{% extends 'blog_app/base.html' %}
+{% block body_content %}
+
+{% for post in post_list %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2><a href="{% url 'blog_app:post_detail' pk=post.pk %}"><strong>{{post.title}}</strong></a></h2>
+        <p>Created on: {{post.create_date|date:"d-m-y"}}</p>
+    </div>
+    <div class="panel-body">
+        {{post.text|safe|linebreaksbr}}
+    </div>
+    <div class="panel-footer">
+        <a class="btn btn-default btn-sm" href="{% url 'blog_app:post_publish' pk=post.pk %}">Publish</a>
+        <a class="btn btn-default btn-sm" href="{% url 'blog_app:post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        <a class="btn btn-default btn-sm" href="{% url 'blog_app:post_delete' pk=post.pk %}"><span class="glyphicon glyphicon-trash"></span></a>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

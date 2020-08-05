@@ -1,0 +1,41 @@
+{% extends 'blog_app/base.html' %}
+{% block body_content %}
+<div class="post">
+    <div class="post-header">
+        <h1>{{post.title}}</h1>
+        {% if post.publish_date %}
+        <p>Published on: {{post.publish_date|date:"d-m-y"}}</p>
+        {% else %}
+        <p>Created on: {{post.create_date|date:"d-m-y"}}</p>
+        <a class="btn btn-default btn-sm" href="{% url 'blog_app:post_publish' pk=post.pk %}">Publish</a>
+        {% endif %}
+    </div>
+    <div class="post-content">
+        <p>{{post.text|safe|linebreaksbr}}</p>
+    </div>
+    <div class="post-links">
+        <a class="btn btn-default" href="{% url 'blog_app:post_edit' pk=post.pk %}">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </a>
+        <a class="btn btn-default" href="{% url 'blog_app:post_delete' pk=post.pk %}">
+            <span class="glyphicon glyphicon-trash"></span>
+        </a>
+    </div>
+    <div class="post-comments">
+        <h2>Comments</h2>
+        <div class="container-fluid">
+            {% for comment in post.approved_comments %}
+            <div class="comment-header">
+                <h3>{{comment.author}}</h3>
+            </div>
+            <div class="comment-text">
+                <p>{{comment.text|safe|linebreaksbr}}</p>
+            </div>
+            <div class="comment-footer">
+                <p>On: {{comment.create_date|date:"d-m-y"}}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

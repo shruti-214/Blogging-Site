@@ -1,0 +1,8 @@
+{% extends 'blog_app/base.html' %}
+{% block body_content %}
+<div class="jumbotron">
+    <h1>Welcome {% if user.is_authenticated %} {{user.username}} {% endif %} !</h1>
+    <h2>Feel free to explore...</h2>
+    <a class="btn btn-default btn-lg" href="{% url 'blog_app:post_list' %}">Go to Blog Feed</a>
+</div>
+{% endblock %}
