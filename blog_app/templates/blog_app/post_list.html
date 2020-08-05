@@ -5,12 +5,13 @@
 <div class="post">
     <div class="post-header">
         <h2><a href="{% url 'blog_app:post_detail' pk=post.pk %}"><strong>{{post.title}}</strong></a></h2>
-        <p>Author: {{post.author}}&nbsp; Published on: {{post.publish_date|date:"d-m-y"}}</p>
+        <h3>Author: {{post.author}}</h3>
     </div>
     <!-- <div class="post-content">
         {{post.text|safe|linebreaksbr}}
     </div> -->
     <div class="post-footer">
+        <p>Published on: {{post.publish_date|date:"d-m-y"}}</p>
         <p>Comments: {{post.approved_comments.count}}</p>
     </div>
 </div>

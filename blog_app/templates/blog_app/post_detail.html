@@ -2,12 +2,13 @@
 {% block body_content %}
 <div class="post">
     <div class="post-header">
-        <h1>{{post.title}}</h1>
+        <h2>{{post.title}}</h2>
+        <h3>By: {{post.author}}</h3>
         {% if post.publish_date %}
         <p>Published on: {{post.publish_date|date:"d-m-y"}}</p>
         {% else %}
         <p>Created on: {{post.create_date|date:"d-m-y"}}</p>
-        <a class="btn btn-default btn-sm" href="{% url 'blog_app:post_publish' pk=post.pk %}">Publish</a>
+        <a class="btn btn-warning btn-sm" href="{% url 'blog_app:post_publish' pk=post.pk %}">Publish</a>
         {% endif %}
     </div>
     <div class="post-content">
@@ -18,35 +19,40 @@
         <a class="btn btn-default" href="{% url 'blog_app:post_edit' pk=post.pk %}">
             <span class="glyphicon glyphicon-pencil"></span>
         </a>
-        <form method="post" action="{% url 'blog_app:post_delete' pk=post.pk %}">
+        <form method="POST" action="{% url 'blog_app:post_delete' pk=post.pk %}">
             {% csrf_token %}
-            <input type="submit" value="delete">
+            <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
         </form>
     </div>
     {% endif %}
+    {% if post.publish_date %}
     <div class="post-comments">
-        <h2>Comments</h2>
-        <p><a class="btn btn-default btn-sm" href="{% url 'blog_app:post_comment' pk=post.pk %}">Add Comment</a></p>
+        <h3>Comments</h3>
+        <div class="jumbotron">
+            {% include 'blog_app/comment_form.html' %}
+        </div>
         <div class="container-fluid">
-            {% block comment_block %}
-            {% endblock %}
-            {% for comment in post.comments %}
-                <!-- {% if comment.approved or post.author == user %} -->
-                <div class="comment-header">
-                    <h3>{{comment.author}}</h3>
+            {% for comment in post.comments.all %}
+                {% if post.author == user  or comment.approved %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>{{comment.author}}</h4>
+                    </div>
+                    <div class="panel-body">
+                        <p>{{comment.text|safe|linebreaksbr}}</p>
+                    </div>
+                    <div class="panel-footer">
+                        <p>On: {{comment.create_date|date:"d-m-y"}}</p>
+                        {% if not comment.approved %}
+                        <a class="btn btn-warning btn-sm" href="#">Approve</a>
+                        <a class="btn btn-danger btn-sm" href="#">Delete</a>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="comment-text">
-                    <p>{{comment.text|safe|linebreaksbr}}</p>
-                </div>
-                <div class="comment-footer">
-                    <p>On: {{comment.create_date|date:"d-m-y"}}</p>
-                    <!-- {% if not comment.approved %}
-                    <a class="btn btn-warning btn-sm" href="#">Approve Comment</a>
-                    {% endif %} -->
-                </div>
-                <!-- {% endif %} -->
+                {% endif %}
             {% endfor %}
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}

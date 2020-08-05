@@ -83,7 +83,7 @@ class DraftListView(LoginRequiredMixin, ListView):
     redirect_field_name = 'blog_app:post_list'
     model = Post
     def get_queryset(self):
-        return Post.objects.filter(publish_date__isnull=True).order_by('-create_date')
+        return Post.objects.filter(author=self.request.user, publish_date__isnull=True).order_by('-create_date')
     template_name = 'blog_app/drafts.html'
 
 class PostDetailView(DetailView):
@@ -119,13 +119,12 @@ def publish_post(request, pk):
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.save()
-            return redirect('blog_app:post_detail', pk=pk)
-    else:
-        form = CommentForm()
-    return render(request, 'blog_app/comment_form.html', {'post':post, 'form':form})
+        author = request.POST.get('author')
+        text = request.POST.get('text')
+        comment = Comment(post=post, author=author, text=text)
+        comment.save()
+    return redirect('blog_app:post_detail', pk=pk)
+
+# @login_required
+# def comment_approve(request, )
 
