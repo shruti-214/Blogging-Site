@@ -127,5 +127,5 @@ def add_comment_to_post(request, pk):
             return redirect('blog_app:post_detail', pk=pk)
     else:
         form = CommentForm()
-    return render(request, 'blog_app/comment_form.html', {'form':form})
+    return render(request, 'blog_app/comment_form.html', {'post':post, 'form':form})
 

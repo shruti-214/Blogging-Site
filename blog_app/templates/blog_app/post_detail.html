@@ -13,30 +13,38 @@
     <div class="post-content">
         <p>{{post.text|safe|linebreaksbr}}</p>
     </div>
-    {% if user.is_authenticated %}
+    {% if post.author == user %}
     <div class="post-links">
         <a class="btn btn-default" href="{% url 'blog_app:post_edit' pk=post.pk %}">
             <span class="glyphicon glyphicon-pencil"></span>
         </a>
-        <a class="btn btn-default" href="{% url 'blog_app:post_delete' pk=post.pk %}">
-            <span class="glyphicon glyphicon-trash"></span>
-        </a>
+        <form method="post" action="{% url 'blog_app:post_delete' pk=post.pk %}">
+            {% csrf_token %}
+            <input type="submit" value="delete">
+        </form>
     </div>
     {% endif %}
     <div class="post-comments">
         <h2>Comments</h2>
-
+        <p><a class="btn btn-default btn-sm" href="{% url 'blog_app:post_comment' pk=post.pk %}">Add Comment</a></p>
         <div class="container-fluid">
-            {% for comment in post.approved_comments %}
-            <div class="comment-header">
-                <h3>{{comment.author}}</h3>
-            </div>
-            <div class="comment-text">
-                <p>{{comment.text|safe|linebreaksbr}}</p>
-            </div>
-            <div class="comment-footer">
-                <p>On: {{comment.create_date|date:"d-m-y"}}</p>
-            </div>
+            {% block comment_block %}
+            {% endblock %}
+            {% for comment in post.comments %}
+                <!-- {% if comment.approved or post.author == user %} -->
+                <div class="comment-header">
+                    <h3>{{comment.author}}</h3>
+                </div>
+                <div class="comment-text">
+                    <p>{{comment.text|safe|linebreaksbr}}</p>
+                </div>
+                <div class="comment-footer">
+                    <p>On: {{comment.create_date|date:"d-m-y"}}</p>
+                    <!-- {% if not comment.approved %}
+                    <a class="btn btn-warning btn-sm" href="#">Approve Comment</a>
+                    {% endif %} -->
+                </div>
+                <!-- {% endif %} -->
             {% endfor %}
         </div>
     </div>
