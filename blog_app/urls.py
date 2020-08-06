@@ -16,5 +16,7 @@ urlpatterns = [
     re_path(r'^post/(?P<pk>\d+)/delete/$', views.DeletePost.as_view(), name='post_delete'),
     re_path(r'^post/(?P<pk>\d+)/publish/$', views.publish_post, name='post_publish'),
     re_path(r'^post/(?P<pk>\d+)/comment/$', views.add_comment_to_post, name='post_comment'),
+    re_path(r'^comment/(?P<pk>\d+)/approve/$', views.comment_approve, name='comment_approve'),
+    re_path(r'^comment/(?P<pk>\d+)/delete/$', views.comment_delete, name='comment_delete'),
     
 ]

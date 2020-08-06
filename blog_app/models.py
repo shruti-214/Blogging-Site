@@ -34,8 +34,8 @@ class Comment(models.Model):
         self.approved = True
         self.save()
 
-    def get_absolute_url(self):
-        pass
+    # def get_absolute_url(self):
+    #     pass
 
     def __str__(self):
         return self.text
